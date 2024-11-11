@@ -28,12 +28,11 @@ jobs:
 
       - name: Install Newman (Postman CLI)
         run: npm install -g newman
-        
-      - name: Start the OpenAPI server in the background
-        shell: pwsh
+        # Paso para iniciar Flask con Gunicorn
+      - name: Start Flask server with Gunicorn
         run: |
-          nohup python -m openapi_server
-          
+          nohup gunicorn -w 4 -b 0.0.0.0:8080 openapi_server:app &  # Inicia Flask con gunicorn
+         
       - name: Check if Flask is running
         run: |
           curl --silent --fail http://127.0.0.1:8080
