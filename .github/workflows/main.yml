@@ -2,8 +2,6 @@ name: Test API and Run Postman Tests on Windows
 
 on:
   push:
-    branches:
-      - main  # O ajusta según lo necesites
 
 jobs:
   test:
@@ -13,22 +11,15 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      # Paso para configurar Docker
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
-
-      # Paso para construir la imagen Docker
-      - name: Build Docker image
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12.2
+      - name: Install dependencies
         run: |
-          docker build -t flask-app .
-
-      # Paso para ejecutar el contenedor Docker
-      - name: Run Flask container
-        run: |
-          docker run -d -p 8080:8080 flask-app
-          sleep 10  # Espera a que el contenedor se inicie (ajusta el tiempo si es necesario)
-
-      # Paso para instalar Node.js y Newman
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requeriments_sqlalchemy.txt
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -36,13 +27,13 @@ jobs:
 
       - name: Install Newman (Postman CLI)
         run: npm install -g newman
-
-      # Paso para ejecutar las pruebas con Newman
+       # Paso para iniciar Flask en segundo plano 
+      - name: Inicia la Api Usuarios
+        run: |
+          nohup python3 -m openapi_server # Inicia Flask 
+        
       - name: Run Postman tests with Newman
         run: |
           newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json
-
-      # Paso para detener el contenedor Docker (opcional)
-      - name: Stop Docker container
-        run: |
-          docker ps -q --filter "ancestor=flask-app" | xargs docker stop
+        env:
+          BASE_URL: http://127.0.0.1:8080 # Ajusta el puerto según el que usa 
