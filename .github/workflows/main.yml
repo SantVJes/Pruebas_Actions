@@ -33,6 +33,20 @@ jobs:
           python3 -m openapi_server &  # Iniciar el servidor en segundo plano
           echo "Server starting..."
           sleep 5  # Pausa inicial
+      - name: Wait for server to be ready
+        run: |
+          # Verificar la conexión continuamente hasta que esté disponible
+          for i in {1..30}; do
+            if curl -s http://localhost:8000 > /dev/null; then
+              echo "Server is up!"
+              exit 0
+            fi
+            echo "Waiting for server..."
+            sleep 2
+          done
+          echo "Server failed to start."
+          exit 1
+
         
       - name: Run Postman tests with Newman
         run: |
