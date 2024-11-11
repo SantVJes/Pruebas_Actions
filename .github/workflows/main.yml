@@ -31,6 +31,6 @@ jobs:
 
       - name: Run Postman tests with Newman
         run: |
-          newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json -e openapi_server/test/postman_environment.json
+          newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json
         env:
           BASE_URL: http://localhost:8080  # Ajusta el puerto según el que usa tu API
