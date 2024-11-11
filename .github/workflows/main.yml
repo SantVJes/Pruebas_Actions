@@ -32,30 +32,9 @@ jobs:
       - name: Start Flask server with Gunicorn
         run: |
           nohup gunicorn -w 4 -b 0.0.0.0:8080 openapi_server:app &  # Inicia Flask con gunicorn
-          sleep 10  # Espera a que el servidor esté listo (ajusta el tiempo si es necesario)
+        
 
-      # Espera dinámica a que el servidor Flask esté listo
-      - name: Wait for Flask server to be ready
-        run: |
-          echo "Waiting for Flask server to start..."
-          for i in {1..20}; do
-            if curl --silent --fail http://127.0.0.1:8080; then
-              echo "Flask server is up!"
-              break
-            else
-              echo "Flask server is not ready, retrying in 5 seconds..."
-              sleep 5
-            fi
-          done
-          if [ $i -eq 20 ]; then
-            echo "Flask server did not start in time."
-            exit 1
-          fi
-         
-      - name: Check if Flask is running
-        run: |
-          curl --silent --fail http://127.0.0.1:8080
-          echo "Flask server is up and running"
+  
 
       - name: Run Postman tests with Newman
         run: |
