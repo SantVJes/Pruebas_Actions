@@ -29,10 +29,6 @@ jobs:
       - name: Install Newman (Postman CLI)
         run: npm install -g newman
 
-      - name: Wait for API to be ready
-        run: |
-          timeout 10  # Ajusta el tiempo si es necesario
-
       - name: Run Postman tests with Newman
         run: |
           newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json -e openapi_server/test/postman_environment.json
