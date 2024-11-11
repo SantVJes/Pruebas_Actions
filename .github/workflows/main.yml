@@ -32,7 +32,7 @@ jobs:
       - name: Start the OpenAPI server in the background
         shell: pwsh
         run: |
-          python -m openapi_server
+          nohup python -m openapi_server
           Start-Sleep -Seconds 30  # Aumenta el tiempo de espera a 15 segundos para asegurarte de que el servidor esté listo
       - name: Check if Flask is running
         run: |
