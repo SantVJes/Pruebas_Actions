@@ -180,23 +180,19 @@ def get_all_usuarios():  # noqa: E501
     :rtype: Union[List[Usuario], Tuple[List[Usuario], int], Tuple[List[Usuario], int, Dict[str, str]]
     """
     
-    try:
+   # try:
         # Obtiene todos los registros de usuarios en la base de datos, ordenados por 'status' (activos primero)
-        usuarios = Usuario.query.order_by(Usuario.status.desc()).all()  # Ordena por 'status' (True primero, luego False)
+    #    usuarios = Usuario.query.order_by(Usuario.status.desc()).all()  # Ordena por 'status' (True primero, luego False)
 
         # Convierte cada usuario en un diccionario usando `to_dict`
-        usuarios_dict = [usuario.to_dict() for usuario in usuarios]
+     #   usuarios_dict = [usuario.to_dict() for usuario in usuarios]
 
-        return usuarios_dict, 200  # Devuelve la lista de usuarios y el código HTTP 200 (OK)
+      #  return usuarios_dict, 200  # Devuelve la lista de usuarios y el código HTTP 200 (OK)
 
-    except Exception as e:
+    #except Exception as e:
       # Manejo de errores en caso de fallo en la base de datos u otro problema
-        error_msg = {"error": f"Error al obtener usuarios: {str(e)}"}
-        return [], 500, error_msg  # Devuelve lista vacía, código 500 y mensaje de error
-
-    
-    
-    
+     #   error_msg = {"error": f"Error al obtener usuarios: {str(e)}"}
+      #  return [], 500, error_msg  # Devuelve lista vacía, código 500 y mensaje de erro
     return 'do some magic!'
 
 
