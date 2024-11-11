@@ -34,6 +34,10 @@ jobs:
         run: |
           Start-Job -ScriptBlock { python -m openapi_server }
           Start-Sleep -Seconds 30  # Aumenta el tiempo de espera a 15 segundos para asegurarte de que el servidor esté listo
+      - name: Check if Flask is running
+        run: |
+          curl --silent --fail http://127.0.0.1:8080
+          echo "Flask server is up and running"
 
       - name: Run Postman tests with Newman
         run: |
