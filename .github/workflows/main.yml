@@ -28,15 +28,11 @@ jobs:
       - name: Install Newman (Postman CLI)
         run: npm install -g newman
        # Paso para iniciar Flask en segundo plano 
-      - name: Inicia la Api Usuarios
+      - name: Iniciar servidor API y esperar
         run: |
-          nohup python3 -m openapi_server > server_output.log 2>&1 &  # Inicia el servidor en segundo plano y redirige la salida a un archivo log
-          sleep 30 # Pausa inicial para dar tiempo a que el servidor se inicie
-      - name: Check server logs
-        run: cat server_output.log
+          nohup python3 -m openapi_server &
+          wait-for-it http://localhost:8080 --timeout 30
 
-
-        
       - name: Run Postman tests with Newman
         run: |
             newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json 
