@@ -35,7 +35,8 @@ jobs:
 
       - name: Run Postman tests with Newman
         run: |
-            newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json & newman_output.log 2>&1 &  # Ejecutar en segundo plano y redirigir la salida
-            tail -f newman_output.log  # Mostrar los logs de Newman en tiempo real
+          newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json > newman_output.log 2>&1 &  # Ejecutar en segundo plano y redirigir la salida
+          sleep 5  # Espera para asegurarte de que el archivo de log se cree
+          tail -f newman_output.log  # Muestra los logs de Newman en tiempo real
         env:
             BASE_URL: http://localhost:8080
