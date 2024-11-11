@@ -29,12 +29,6 @@ jobs:
       - name: Install Newman (Postman CLI)
         run: npm install -g newman
 
-      - name: Start the OpenAPI server
-        run: |
-          start /B python -m openapi_server
-        env:
-          ENV_VAR: value  # Añade variables de entorno si tu API lo necesita
-
       - name: Wait for API to be ready
         run: |
           timeout 10  # Ajusta el tiempo si es necesario
