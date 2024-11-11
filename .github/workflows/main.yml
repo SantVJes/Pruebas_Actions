@@ -33,7 +33,7 @@ jobs:
         shell: pwsh
         run: |
           Start-Job -ScriptBlock { python -m openapi_server }
-          Start-Sleep -Seconds 15  # Aumenta el tiempo de espera a 15 segundos para asegurarte de que el servidor esté listo
+          Start-Sleep -Seconds 30  # Aumenta el tiempo de espera a 15 segundos para asegurarte de que el servidor esté listo
 
       - name: Run Postman tests with Newman
         run: |
