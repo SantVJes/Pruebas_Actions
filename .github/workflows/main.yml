@@ -30,7 +30,7 @@ jobs:
        # Paso para iniciar Flask en segundo plano 
       - name: Inicia la Api Usuarios
         run: |
-          nohup python3 -m openapi_server # Inicia Flask 
+          nohup python3 -m openapi_server &  # Inicia Flask 
         
       - name: Run Postman tests with Newman
         run: |
