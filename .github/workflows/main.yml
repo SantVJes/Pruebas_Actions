@@ -31,10 +31,11 @@ jobs:
       - name: Iniciar servidor API y esperar
         run: |
           nohup python3 -m openapi_server &
-          wait-for-it http://localhost:8080 --timeout 30
+          
 
       - name: Run Postman tests with Newman
         run: |
-            newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json 
+            newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json & newman_output.log 2>&1 &  # Ejecutar en segundo plano y redirigir la salida
+            tail -f newman_output.log  # Mostrar los logs de Newman en tiempo real
         env:
             BASE_URL: http://localhost:8080
