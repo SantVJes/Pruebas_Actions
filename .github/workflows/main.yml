@@ -63,9 +63,10 @@ jobs:
               perfiles JSONB
           );
           INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
-          VALUES ('Sanjesvel@hotmail.com', 'Econtra95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
-          INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
-          VALUES ('Sanjesvesl@hotmail.com', 'Econtras95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
+          VALUES ('Sanjesvel@hotmail.com', 'Econtra95#', 'tarjeta', TRUE, '{"perfil1": "valor1"}');
+
+          psql -h localhost -p 5433 -U postgres -d Usuarios -c "SELECT * FROM usuarios;"
+
           "
       - name: Build Docker image
         run: |
