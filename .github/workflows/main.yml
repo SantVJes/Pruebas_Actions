@@ -17,7 +17,7 @@ jobs:
         ports:
           - 5433:5432
         options: >-
-          --health-cmd="pg_isready -U testuser"
+          --health-cmd="pg_isready -U postgres"
           --health-interval=10s 
           --health-timeout=5s 
           --health-retries=5
@@ -46,14 +46,14 @@ jobs:
 
       - name: Set up PostgreSQL Database
         env:
-          PGPASSWORD: testpassword
+          PGPASSWORD: 12345
         run: |
-          until pg_isready -h localhost -p 5433 -U testuser; do
+          until pg_isready -h localhost -p 5433 -U postgres; do
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
 
-          psql -h localhost -p 5433 -U testuser -d Usuarios -c "
+          psql -h localhost -p 5433 -U postgres -d Usuarios -c "
           CREATE TABLE usuarios (
               id_usuario SERIAL PRIMARY KEY,
               email VARCHAR(255) UNIQUE NOT NULL,
@@ -64,6 +64,8 @@ jobs:
           );
           INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
           VALUES ('Sanjesvel@hotmail.com', 'Econtra95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
+          INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
+          VALUES ('Sanjesvesl@hotmail.com', 'Econtras95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
           "
 
       - name: Build Docker image
