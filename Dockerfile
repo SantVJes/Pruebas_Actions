@@ -1,4 +1,4 @@
-FROM python:3.12-windowsservercore
+FROM python:3-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

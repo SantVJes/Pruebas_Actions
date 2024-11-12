@@ -1,11 +1,11 @@
-name: Test API and Run Postman Tests on Windows
+name: Test API and Run Postman Tests on Linux
 
 on:
   push:
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest  # Cambié a Ubuntu ya que es más compatible con Docker
 
     steps:
       - name: Check out the code
@@ -34,18 +34,21 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t openapi-server .
-      
+
+      # Ejecutar el contenedor Docker en segundo plano
       - name: Run Docker container in the background
         run: |
           docker run -d -p 8080:8080 openapi-server
-
+          
+      # Esperar a que el servidor se inicie
       - name: Wait for server to start
         run: |
           sleep 10  # Esperar a que el servidor se inicie
 
+      # Ejecutar pruebas de Postman con Newman
       - name: Run Postman tests with Newman
         run: |
-          newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json > newman_output.log 2>&1 &  # Ejecutar en segundo plano y redirigir la salida
+          newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json > newman_output.log 2>&1
           sleep 5  # Espera para asegurarte de que el archivo de log se cree
           tail -f newman_output.log  # Muestra los logs de Newman en tiempo real
         env:
