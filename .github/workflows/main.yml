@@ -48,28 +48,29 @@ jobs:
         env:
           PGPASSWORD: 12345
         run: |
+          # Espera a que PostgreSQL esté listo
           until pg_isready -h localhost -p 5433 -U postgres; do
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
 
+          # Crear la tabla y agregar datos
           psql -h localhost -p 5433 -U postgres -d Usuarios -c "
-          CREATE TABLE usuarios (
+          CREATE TABLE IF NOT EXISTS usuarios (
               id_usuario SERIAL PRIMARY KEY,
               email VARCHAR(255) UNIQUE NOT NULL,
               password VARCHAR(255) NOT NULL,
               metodo_pago VARCHAR(50),
               status BOOLEAN DEFAULT TRUE,
               perfiles JSONB
-          );
-          "
+          );"
+
           psql -h localhost -p 5433 -U postgres -d Usuarios -c "
           INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
-          VALUES ('Sanjesvel@hotmail.com', 'Econtra95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
-          INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
-          VALUES ('Sanjesvesl@hotmail.com', 'Econtras95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
-            "
-          
+          VALUES ('Sanjesvel@hotmail.com', 'Econtra95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\"}');
+          "
+
+          # Realiza un SELECT para verificar los datos
           psql -h localhost -p 5433 -U postgres -d Usuarios -c "SELECT * FROM usuarios;"
 
 
