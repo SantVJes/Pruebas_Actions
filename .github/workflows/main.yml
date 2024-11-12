@@ -67,7 +67,6 @@ jobs:
           INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
           VALUES ('Sanjesvesl@hotmail.com', 'Econtras95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
           "
-
       - name: Build Docker image
         run: |
           docker build -t openapi-server .
