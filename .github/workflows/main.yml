@@ -5,7 +5,22 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # Cambié a Ubuntu ya que es más compatible con Docker
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: Usuarios
+        ports:
+          - 5432:5432
+        options: > 
+          --health-cmd="pg_isready -U testuser" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
 
     steps:
       - name: Check out the code
@@ -30,6 +45,34 @@ jobs:
       - name: Install Newman (Postman CLI)
         run: npm install -g newman
 
+      # Crear la base de datos y la tabla `usuarios` con datos de prueba
+      - name: Set up PostgreSQL Database
+        env:
+          PGPASSWORD: testpassword
+        run: |
+          # Esperar a que el servicio PostgreSQL esté disponible
+          until pg_isready -h localhost -p 5432 -U testuser; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+          # Crear la tabla y poblarla con el usuario de prueba
+          psql -h localhost -U testuser -d Usuarios -c "
+          CREATE TABLE usuarios (
+              id_usuario SERIAL PRIMARY KEY,
+              email VARCHAR(255) UNIQUE NOT NULL,
+              password VARCHAR(255) NOT NULL,
+              metodo_pago VARCHAR(50),
+              status BOOLEAN DEFAULT TRUE,
+              perfiles JSONB
+          );
+          INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
+          VALUES ('Sanjesvel@hotmail.com', 'Econtra95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
+          INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
+          VALUES ('Sanjesvel@gmail.com', 'Econtra456', 'paypal', FALSE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
+
+          "
+
       # Crear y construir la imagen Docker
       - name: Build Docker image
         run: |
@@ -39,16 +82,15 @@ jobs:
       - name: Run Docker container in the background
         run: |
           docker run -d -p 8080:8080 openapi-server
-          
+
       # Esperar a que el servidor se inicie
       - name: Wait for server to start
         run: |
-          sleep 10  # Esperar a que el servidor se inicie
+          sleep 10
 
       # Ejecutar pruebas de Postman con Newman
       - name: Run Postman tests with Newman
         run: |
-          newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json 
-          
+          newman run openapi_server/test/Test_Api_Usuarios.postman_collection.json
         env:
           BASE_URL: http://localhost:8080
