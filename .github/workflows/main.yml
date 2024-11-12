@@ -15,7 +15,7 @@ jobs:
           POSTGRES_PASSWORD: testpassword
           POSTGRES_DB: Usuarios
         ports:
-          - 5432:5432
+          - 5433:5433
         options: > 
           --health-cmd="pg_isready -U testuser" 
           --health-interval=10s 
@@ -51,7 +51,7 @@ jobs:
           PGPASSWORD: testpassword
         run: |
           # Esperar a que el servicio PostgreSQL esté disponible
-          until pg_isready -h localhost -p 5432 -U testuser; do
+          until pg_isready -h localhost -p 5433 -U testuser; do
             echo "Waiting for PostgreSQL..."
             sleep 2
           done
@@ -70,7 +70,6 @@ jobs:
           VALUES ('Sanjesvel@hotmail.com', 'Econtra95#', 'tarjeta', TRUE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
           INSERT INTO usuarios (email, password, metodo_pago, status, perfiles)
           VALUES ('Sanjesvel@gmail.com', 'Econtra456', 'paypal', FALSE, '{\"perfil1\": \"valor1\", \"perfil2\": \"valor2\"}');
-
           "
 
       # Crear y construir la imagen Docker
