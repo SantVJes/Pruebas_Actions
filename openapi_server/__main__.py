@@ -19,8 +19,8 @@ def main():
     )
 
     # Configura la URL de la base de datos PostgreSQL para SQLAlchemy y desactiva el seguimiento de modificaciones para mejorar el rendimiento.
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@postgres:5433/Usuarios' 
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@postgres:5433/Usuarios'
+    app.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # Inicializa la instancia de SQLAlchemy, vinculándola a la aplicación Connexion.
     db = SQLAlchemy(app.app)
 
